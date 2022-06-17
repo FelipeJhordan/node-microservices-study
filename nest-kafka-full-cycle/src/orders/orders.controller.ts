@@ -7,11 +7,12 @@ import {
   Param,
   Patch,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { KafkaMessage } from '@nestjs/microservices/external/kafka.interface';
 import { Producer } from 'kafkajs'; // Obrigado túlio, REPRESENTANDO O BRASIL
 import { CreateOrderDto } from './dto/create-order.dto';
+import { KafkaMessagePaymentSuccess } from './dto/payment-success.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrdersService } from './orders.service';
 
@@ -52,7 +53,7 @@ export class OrdersController {
   }
 
   @MessagePattern('topico-exemplo')
-  consume(@Payload() message: KafkaMessage) {
+  consume(@Payload(new ValidationPipe()) message: KafkaMessagePaymentSuccess) {
     console.log(message.value);
   }
 
